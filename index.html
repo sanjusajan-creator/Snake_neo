@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Snake Neo Edition</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="background-blobs">
+        <div class="blob blob1"></div>
+        <div class="blob blob2"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <h1>SNAKE<span>NEO</span></h1>
+            <div class="scoreboard">
+                <div class="score-box">
+                    <span class="label">SCORE</span>
+                    <span id="score" class="value">0</span>
+                </div>
+                <div class="score-box">
+                    <span class="label">HIGH SCORE</span>
+                    <span id="high-score" class="value">0</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="game-area">
+            <canvas id="gameCanvas"></canvas>
+            <div id="overlay" class="overlay">
+                <div class="message" id="message">SNAKE NEO</div>
+                <div class="sub-message">Press Play to Start</div>
+            </div>
+        </div>
+
+        <div class="action-bar">
+            <button id="play-pause-btn" class="action-btn" title="Play/Pause">
+                <svg id="play-icon" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+                <svg id="pause-icon" class="hidden" viewBox="0 0 24 24"><path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/></svg>
+            </button>
+            <button id="reset-btn" class="action-btn" title="Reset Game">
+                <svg viewBox="0 0 24 24"><path d="M17.65 6.35A7.958 7.958 0 0012 4c-4.42 0-7.99 3.58-7.99 8s3.57 8 7.99 8c3.73 0 6.84-2.55 7.73-6h-2.08A5.99 5.99 0 0112 18c-3.31 0-6-2.69-6-6s2.69-6 6-6c1.66 0 3.14.69 4.22 1.78L13 11h7V4l-2.35 2.35z"/></svg>
+            </button>
+        </div>
+
+        <div class="controls-hint">Arrows / WASD / Swipe</div>
+
+        <div class="mobile-controls">
+            <div class="d-pad">
+                <button id="up-btn" class="d-btn up">▲</button>
+                <div class="d-pad-row">
+                    <button id="left-btn" class="d-btn left">◀</button>
+                    <button id="right-btn" class="d-btn right">▶</button>
+                </div>
+                <button id="down-btn" class="d-btn down">▼</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
