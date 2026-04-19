@@ -13,7 +13,7 @@ let food = { x: 5, y: 5 };
 let direction = { x: 1, y: 0 };
 let score = 0;
 let highScore = localStorage.getItem('snakeHighScore') || 0;
-let gameSpeed = INITIAL_SPEED;
+let gameSpeed = 15;
 let gameActive = false;
 let isPaused = false;
 let isGameOver = false;
@@ -290,6 +290,9 @@ document.getElementById('right-btn').addEventListener('click', () => setDir(1, 0
 playPauseBtn.addEventListener('click', togglePlayPause);
 resetBtn.addEventListener('click', resetGame);
 
+init();
+resetGame();
+
 document.querySelectorAll('.diff-btn').forEach(btn => {
     btn.addEventListener('click', () => {
         selectDifficulty(btn.dataset.diff);
@@ -304,6 +307,3 @@ window.addEventListener('touchend', e => {
     if (Math.abs(dx) > Math.abs(dy)) { if (Math.abs(dx) > 15) setDir(dx > 0 ? 1 : -1, 0); }
     else { if (Math.abs(dy) > 15) setDir(0, dy > 0 ? 1 : -1); }
 }, { passive: true });
-
-init();
-resetGame();
