@@ -1,8 +1,15 @@
 // Game Constants
 const GRID_SIZE = 20;
-const INITIAL_SPEED = 18; // Faster base speed
-const SPEED_INCREMENT = 0.5;
-const MAX_SPEED = 35;
+const INITIAL_SPEED = 15;
+const SPEED_INCREMENT = 0.75;
+const MAX_SPEED = 40;
+const SPEED_LEVELS = [
+    { score: 0, speed: 15, label: 'Level 1' },
+    { score: 50, speed: 20, label: 'Level 2' },
+    { score: 100, speed: 26, label: 'Level 3' },
+    { score: 150, speed: 32, label: 'Level 4' },
+    { score: 200, speed: 40, label: 'Level 5' }
+];
 
 // Game State
 let snake = [{ x: 10, y: 10, px: 10, py: 10 }];
@@ -26,6 +33,7 @@ let moveProgress = 0;
 const canvas = document.getElementById('gameCanvas');
 const ctx = canvas.getContext('2d');
 const scoreDisplay = document.getElementById('score');
+const levelDisplay = document.getElementById('level');
 const highScoreDisplay = document.getElementById('high-score');
 const overlay = document.getElementById('overlay');
 const messageDisplay = document.getElementById('message');
@@ -60,11 +68,18 @@ function playSound(type) {
     }
 }
 
+function resizeCanvas() {
+    const gameArea = canvas.parentElement;
+    const size = Math.min(gameArea.clientWidth, gameArea.clientHeight);
+    canvas.width = size;
+    canvas.height = size;
+}
+
 function init() {
-    canvas.width = 400;
-    canvas.height = 400;
+    resizeCanvas();
     highScoreDisplay.innerText = highScore;
     requestAnimationFrame(gameLoop);
+    window.addEventListener('resize', resizeCanvas);
 }
 
 function togglePlayPause() {
@@ -94,12 +109,14 @@ function resetGame() {
     direction = { x: 1, y: 0 };
     inputQueue = [];
     score = 0;
+    currentLevel = 0;
     gameSpeed = INITIAL_SPEED;
     moveProgress = 0;
     gameActive = false;
     isPaused = false;
     isGameOver = false;
     scoreDisplay.innerText = score;
+    levelDisplay.innerText = 1;
     overlay.classList.remove('hidden');
     messageDisplay.innerText = 'SNAKE NEO';
     subMessageDisplay.innerText = 'Press Play to Start';
@@ -170,13 +187,25 @@ function updateGrid() {
             localStorage.setItem('snakeHighScore', highScore);
         }
         playSound('eat');
-        gameSpeed = Math.min(MAX_SPEED, INITIAL_SPEED + (score / 50) * SPEED_INCREMENT);
+        updateLevel();
         spawnFood();
     } else {
         snake.pop();
     }
 }
 
+let currentLevel = 0;
+function updateLevel() {
+    const newLevel = SPEED_LEVELS.findIndex(level => score < level.score);
+    if (newLevel === -1) {
+        gameSpeed = MAX_SPEED;
+        currentLevel = SPEED_LEVELS.length - 1;
+    } else {
+        currentLevel = newLevel > 0 ? newLevel - 1 : 0;
+        gameSpeed = SPEED_LEVELS[currentLevel].speed;
+    }
+    levelDisplay.innerText = currentLevel + 1;
+}
 function spawnFood() {
     while (true) {
         food = { x: Math.floor(Math.random() * GRID_SIZE), y: Math.floor(Math.random() * GRID_SIZE) };
