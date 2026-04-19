@@ -102,6 +102,7 @@ function start() {
 
 function selectDifficulty(diff) {
     selectedDifficulty = diff;
+    resetGame();
     start();
 }
 
