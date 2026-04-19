@@ -140,6 +140,40 @@ canvas {
     transition: opacity 0.3s;
 }
 
+.difficulty-buttons {
+    display: flex;
+    gap: 0.8rem;
+    margin-top: 1rem;
+}
+
+.diff-btn {
+    padding: 0.6rem 1.2rem;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    border: 1px solid var(--glass-border);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.diff-btn:hover {
+    background: rgba(0, 242, 255, 0.2);
+    border-color: var(--snake-color);
+    transform: scale(1.05);
+}
+
+.diff-btn[data-diff="easy"]:hover {
+    background: rgba(0, 255, 100, 0.2);
+    border-color: #00ff64;
+}
+
+.diff-btn[data-diff="hard"]:hover {
+    background: rgba(255, 50, 50, 0.2);
+    border-color: #ff3232;
+}
+
 .sub-message {
     font-size: 0.8rem;
     color: var(--text-secondary);

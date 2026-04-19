@@ -1,15 +1,11 @@
 // Game Constants
 const GRID_SIZE = 20;
-const INITIAL_SPEED = 15;
-const SPEED_INCREMENT = 0.75;
-const MAX_SPEED = 40;
-const SPEED_LEVELS = [
-    { score: 0, speed: 15, label: 'Level 1' },
-    { score: 50, speed: 20, label: 'Level 2' },
-    { score: 100, speed: 26, label: 'Level 3' },
-    { score: 150, speed: 32, label: 'Level 4' },
-    { score: 200, speed: 40, label: 'Level 5' }
-];
+const DIFFICULTY_SPEEDS = {
+    easy: { initial: 8, increment: 0.3, max: 15 },
+    medium: { initial: 15, increment: 0.5, max: 25 },
+    hard: { initial: 25, increment: 0.8, max: 40 }
+};
+let selectedDifficulty = 'medium';
 
 // Game State
 let snake = [{ x: 10, y: 10, px: 10, py: 10 }];
@@ -104,13 +100,19 @@ function start() {
     updateUI();
 }
 
+function selectDifficulty(diff) {
+    selectedDifficulty = diff;
+    start();
+}
+
 function resetGame() {
     snake = [{ x: 10, y: 10, px: 10, py: 10 }, { x: 9, y: 10, px: 9, py: 10 }];
     direction = { x: 1, y: 0 };
     inputQueue = [];
     score = 0;
     currentLevel = 0;
-    gameSpeed = INITIAL_SPEED;
+    const speedConfig = DIFFICULTY_SPEEDS[selectedDifficulty];
+    gameSpeed = speedConfig.initial;
     moveProgress = 0;
     gameActive = false;
     isPaused = false;
@@ -119,7 +121,7 @@ function resetGame() {
     levelDisplay.innerText = 1;
     overlay.classList.remove('hidden');
     messageDisplay.innerText = 'SNAKE NEO';
-    subMessageDisplay.innerText = 'Press Play to Start';
+    subMessageDisplay.innerText = 'Select Difficulty';
     spawnFood();
     updateUI();
 }
@@ -196,14 +198,10 @@ function updateGrid() {
 
 let currentLevel = 0;
 function updateLevel() {
-    const newLevel = SPEED_LEVELS.findIndex(level => score < level.score);
-    if (newLevel === -1) {
-        gameSpeed = MAX_SPEED;
-        currentLevel = SPEED_LEVELS.length - 1;
-    } else {
-        currentLevel = newLevel > 0 ? newLevel - 1 : 0;
-        gameSpeed = SPEED_LEVELS[currentLevel].speed;
-    }
+    const levelThreshold = 50;
+    currentLevel = Math.floor(score / levelThreshold);
+    const speedConfig = DIFFICULTY_SPEEDS[selectedDifficulty];
+    gameSpeed = Math.min(speedConfig.max, speedConfig.initial + (currentLevel * speedConfig.increment));
     levelDisplay.innerText = currentLevel + 1;
 }
 function spawnFood() {
@@ -291,6 +289,12 @@ document.getElementById('right-btn').addEventListener('click', () => setDir(1, 0
 
 playPauseBtn.addEventListener('click', togglePlayPause);
 resetBtn.addEventListener('click', resetGame);
+
+document.querySelectorAll('.diff-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        selectDifficulty(btn.dataset.diff);
+    });
+});
 
 let touchStartX = 0, touchStartY = 0;
 window.addEventListener('touchstart', e => { touchStartX = e.touches[0].clientX; touchStartY = e.touches[0].clientY; }, { passive: true });
